@@ -28,5 +28,6 @@ public class CreateAccount {
         private Long userId;
         private Long accountNumber;
         private LocalDateTime registeredAt;
+
     }
 }
