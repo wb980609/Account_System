@@ -13,13 +13,13 @@ import javax.transaction.Transactional;
 public class AccountService {
     private final AccountRepository accountRepository;
 
+    // 사용자가 있는 지 조회
+    // 계좌의 번호를 생성하고
+    // 계좌를 저장하고, 그 정보를 넘긴다.
+
     @Transactional
-    public void createAccount() {
-        Account account = Account.builder()
-                .accountNumber("40000")
-                .accountStatus(AccountStatus.IN_USE)
-                .build();
-        accountRepository.save(account);
+    public void createAccount(Long userId, Long initialBalance) {
+
     }
 
     @Transactional
