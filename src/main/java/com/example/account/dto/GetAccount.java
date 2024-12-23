@@ -1,6 +1,4 @@
-package com.example.account.domain;
-
-import javax.persistence.Entity;
+package com.example.account.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,10 +8,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@Entity
-public class AccountUser extends BaseEntity{
-    private String name;
+public class GetAccount {
+    private String accountNumber;
+    private Long balance;
 }

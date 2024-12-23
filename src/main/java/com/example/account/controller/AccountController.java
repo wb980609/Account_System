@@ -1,39 +1,62 @@
 package com.example.account.controller;
 
-import com.example.account.domain.Account;
-import com.example.account.dto.CreateAccount;
-import com.example.account.service.AccountService;
-import com.example.account.service.RedisTestService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.account.dto.CreateAccount;
+import com.example.account.dto.DeleteAccount;
+import com.example.account.dto.GetAccount;
+import com.example.account.service.AccountService;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
-    private final RedisTestService redisTestService;
+
+    @GetMapping("/account")
+    public List<GetAccount> getAccountByUserId(
+            @RequestParam("user_id") Long userId
+    ) {
+        return accountService.getAccountsByUserId(userId)
+                .stream()
+                .map(accountDto -> GetAccount.builder()
+                        .accountNumber(accountDto.getAccountNumber())
+                        .balance(accountDto.getBalance())
+                        .build())
+                .collect(Collectors.toList());
+    }
 
     @PostMapping("/account")
-    public CreateAccount.Response createAccount(
-            @RequestBody @Valid CreateAccount.Request request
+    public CreateAccount.CaResponse createAccount(
+            @RequestBody CreateAccount.CaRequest request
     ) {
-        accountService.createAccount(
-                request.getUserId(),
-                request.getInitialBalance()
+        return CreateAccount.CaResponse.fromDto(
+                accountService.createAccount(
+                        request.getId(),
+                        request.getInitialBalance())
         );
-        return "success";
     }
 
-    @GetMapping("/get-lock")
-    public String getLock() {
-        return redisTestService.getLock();
-    }
-
-    @GetMapping("/account/{id}")
-    public Account getAccount(
-            @PathVariable Long id){
-        return accountService.getAccount(id);
+    @DeleteMapping("/account")
+    public DeleteAccount.DaResponse deleteAccont (
+            @RequestBody DeleteAccount.DaRequest request
+    ) {
+        return DeleteAccount.DaResponse.fromDto(
+                accountService.deleteAccount(
+                        request.getId(),
+                        request.getAccountNumber()
+                )
+        );
     }
 }

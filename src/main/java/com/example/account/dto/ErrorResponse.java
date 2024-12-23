@@ -1,6 +1,6 @@
-package com.example.account.domain;
+package com.example.account.dto;
 
-import javax.persistence.Entity;
+import com.example.account.type.ErrorCode;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-public class AccountUser extends BaseEntity{
-    private String name;
+public class ErrorResponse {
+    private ErrorCode errorCode;
+    private String errorMessage;
 }
